@@ -9,13 +9,254 @@ import Foundation
 //----------------------------------------------------------------------------
 public func SquareRange( index aIndex: Int ) -> Range<Int>
 {
-    let start = aIndex - ( aIndex - 1 ) % 3
+    let start = aIndex - aIndex % 3
     return start ..< start + 3
+}
+//#
+//############################################################################
+//# Sudoku
+//#
+struct Sudoku
+{
+    //#
+    //########################################################################
+    //# Cell
+    //#
+    struct Cell
+    {
+        private var m_Digit: UInt8 = 0
+        private var mb_Locked: Bool = false
+        //--------------------------------------------------------------------
+        public var mDigit: UInt8 { m_Digit }
+        public var mbLocked: Bool { mb_Locked }
+        public var mCharDigit: Character { return m_Digit == 0 ? Character( "." ) : String( m_Digit ).first! }
+        //--------------------------------------------------------------------
+        public func mbIsEmpty() -> Bool { return m_Digit == 0 }
+        //--------------------------------------------------------------------
+        public mutating func mSetDigit( _ acDigit: Int )
+        {
+            guard 0...9 ~= acDigit else { return }
+            m_Digit = UInt8( acDigit )
+            mb_Locked = false
+        }
+        //--------------------------------------------------------------------
+        public mutating func mLock( withDigit acDigit: Int )
+        {
+            guard 0...9 ~= acDigit else { return }
+            m_Digit = UInt8( acDigit )
+            mb_Locked = true
+        }
+        //--------------------------------------------------------------------
+        public mutating func mReset()
+        {
+            m_Digit = 0
+            mb_Locked = false
+        }
+    }
+    //------------------------------------------------------------------------
+    public var mBoard = [Cell].init( repeating: Cell(), count: 100 )
+    //------------------------------------------------------------------------
+    subscript( row acRow: Int, col acCol: Int ) -> Cell
+    {
+        get {
+            assert( 0..<9 ~= acRow && 0..<9 ~= acCol, "cell out of range" )
+            return mBoard[ acRow * 9 + acCol ]
+        }
+        set {
+            assert( 0..<9 ~= acRow && 0..<9 ~= acCol, "cell out of range" )
+            mBoard[ acRow * 9 + acCol ] = newValue
+        }
+    }
+    //------------------------------------------------------------------------
+    public func mbAllowed( row acRow:Int, col acCol: Int, _ acDigit: Int ) -> Bool
+    {
+        switch acDigit {
+        case 0:
+            return true
+            
+        case 1...9:
+            for idx in 0..<9 {
+                if self[ row: idx, col: acCol ].mDigit == acDigit {
+                    return false
+                }
+                if self[ row: acRow, col: idx ].mDigit == acDigit {
+                    return false
+                }
+            }
+            let rowRange = SquareRange( index: acRow )
+            let colRange = SquareRange( index: acCol )
+            for row in rowRange {
+                for col in colRange {
+                    if self[ row: row, col: col ].mDigit == acDigit {
+                        return false
+                    }
+                }
+            }
+            return true
+
+        default:
+            return false
+        }
+    }
+    //------------------------------------------------------------------------
+    public func mbHasDigits( count acCount: Int ) -> Bool
+    {
+        var count = 0;
+        for row in 0..<9 {
+            for col in 0..<9 {
+                if self[ row: row, col: col ].mDigit > 0 {
+                    count += 1
+                }
+            }
+        }
+        return count >= acCount
+    }
+    //------------------------------------------------------------------------
+    public mutating func mReset()
+    {
+        for row in 0..<9 {
+            for col in 0..<9 {
+                self[ row: row, col: col ].mReset()
+            }
+        }
+    }
+    //------------------------------------------------------------------------
+    public mutating func mSetDigit( row acRow: Int, col acCol: Int, _ acDigit: Int )
+    {
+        self[ row: acRow, col: acCol ].mSetDigit( acDigit )
+    }
+    //------------------------------------------------------------------------
+    public mutating func mLock( row acRow: Int, col acCol: Int, withDigit acDigit: Int )
+    {
+        self[ row: acRow, col: acCol ].mLock( withDigit: acDigit )
+    }
+}
+//#
+//############################################################################
+//# Sudoku extension
+//#
+extension Sudoku
+{
+    mutating func mbSolve() -> Bool
+    {
+        var bNotSolved = false
+        var bSingles = false
+
+        repeat {
+            var bestRating = 9
+            var bestRow = -1
+            var bestCol = -1
+            bNotSolved = false
+            bSingles = false
+
+            for row in 0..<9 {
+                for col in 0..<9 {
+                    guard self[ row: row, col: col ].mbIsEmpty() else { continue }
+                    var digitCount = 0
+                    var bestDigit = 0
+                    for digit in 1...9 {
+                        if mbAllowed( row: row, col: col, digit ) {
+                            bestDigit = digit
+                            digitCount += 1
+                        }
+                    }
+                    switch digitCount {
+                    case 0:
+                        return false
+                        
+                    case 1:
+                        mSetDigit( row: row, col: col, bestDigit )
+                        bSingles = true
+                        
+                    default:
+                        for digit in 1...9 {
+                            if mbAllowed( row: row, col: col, digit ) {
+                                let rating = m_ComputeRating( row: row, col: col, digit: digit )
+                                if rating == 1 {
+                                    mSetDigit( row: row, col: col, digit )
+                                    bSingles = true
+                                } else if rating < bestRating {
+                                    bNotSolved = true
+                                    bestRating = rating
+                                    bestRow = row
+                                    bestCol = col
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if !bSingles && bestRow >= 0 && bestCol >= 0 {
+                for digit in 1..<10 {
+                    if mbAllowed( row: bestRow, col: bestCol, digit ) {
+                        var helper: Sudoku = self
+                        print( "Try recursive \(digit) at \(bestRow) x \(bestCol)" )
+                        helper.mSetDigit( row: bestRow, col: bestCol, digit )
+                        if helper.mbSolve() {
+                            self = helper
+                            return true
+                        }
+                        print( "Rejected \(digit) at \(bestRow) x \(bestCol)" )
+                    }
+                }
+                return false
+            }
+        } while bNotSolved
+        
+        return true
+    }
+
+    //------------------------------------------------------------------------
+    private func m_ComputeRating( row acRow: Int, col acCol: Int, digit acDigit: Int ) -> Int
+    {
+        let rowRate = m_RateRow( row: acRow, digit: acDigit )
+        let colRate = m_RateCol( col: acCol, digit: acDigit )
+        let squareRate = m_RateSquare( row: acRow, col: acCol, digit: acDigit )
+        return min( squareRate, min( rowRate, colRate ))
+    }
+    //------------------------------------------------------------------------
+    private func m_RateRow( row acRow: Int, digit acDigit: Int ) -> Int
+    {
+        var rating = 0
+        for col in 0..<9 {
+            if mbAllowed( row: acRow, col: col, acDigit ) {
+                rating += 1
+            }
+        }
+        return rating
+    }
+    //------------------------------------------------------------------------
+    private func m_RateCol( col acCol: Int, digit acDigit: Int ) -> Int
+    {
+        var rating = 0
+        for row in 0..<9 {
+            if mbAllowed( row: row, col: acCol, acDigit ) {
+                rating += 1
+            }
+        }
+        return rating
+    }
+    //------------------------------------------------------------------------
+    private func m_RateSquare( row acRow: Int, col acCol: Int, digit acDigit: Int ) -> Int
+    {
+        let rowRange = SquareRange( index: acRow )
+        let colRange = SquareRange( index: acCol )
+        var rating = 0
+        for row in rowRange {
+            for col in colRange {
+                if mbAllowed( row: row, col: col, acDigit ) {
+                    rating += 1
+                }
+            }
+        }
+        return rating
+    }
 }
 //#
 //############################################################################
 //# CSudoku
 //#
+/*
 class CSudoku
 {
     public init()
@@ -291,6 +532,7 @@ class CSudoku
     private var m_Nested: Int
     private var m_Board : CBoard
 }
+ */
 //#
 //# CSudoku
 //############################################################################
