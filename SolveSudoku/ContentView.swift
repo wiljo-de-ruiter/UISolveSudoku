@@ -7,306 +7,185 @@
 
 import SwiftUI
 
-struct Cell
-{
-    var digit = 0
-    var locked = false
-}
+struct CellView: View {
+    @Binding var game: Sudoku
+    public let enter: Int
+    let row: Int
+    let col: Int
+    let clicked: () -> Void
 
-struct Grid3x3
-{
-    var cell: [Cell] = [ Cell(), Cell(), Cell(), Cell(), Cell(), Cell(), Cell(), Cell(), Cell() ]
-    
-    mutating func clear()
-    {
-        for i in 0..<9 {
-            cell[ i ].digit = 0
-            cell[ i ].locked = false
-        }
-    }
-    
-    func allowed( _ val: Int ) -> Bool
-    {
-        switch val {
-        case 0:
-            return true
-        
-        case 1...9:
-            for v in cell {
-                if val == v.digit {
-                    return false
-                }
-            }
-            return true
-            
-        default: return false
-        }
-    }
-    
-    func isLocked( row: Int, col: Int ) -> Bool
-    {
-        cell[ row * 3 + col ].locked
-    }
-
-    mutating func setLocked( row: Int, col: Int, _ abcLocked: Bool )
-    {
-        cell[ row * 3 + col ].locked = abcLocked
-    }
-
-    subscript( row: Int, col: Int ) -> Int
-    {
-        get {
-            assert( row >= 0 && row < 3 && col >= 0 && col < 3, "cell out of range" )
-            return cell[ row * 3 + col ].digit
-        }
-        set {
-            assert( newValue >= 0 && newValue <= 9, "value out of range" )
-            assert( row >= 0 && row < 3 && col >= 0 && col < 3, "cell out of range" )
-            if cell[ row * 3 + col ].digit == newValue {
-                cell[ row * 3 + col ].digit = 0
-            } else if allowed( newValue ) {
-                cell[ row * 3 + col ].digit = newValue
-            }
-        }
-    }
-}
-
-struct Game
-{
-    var grid: [Grid3x3] = [ Grid3x3(), Grid3x3(), Grid3x3(),
-                            Grid3x3(), Grid3x3(), Grid3x3(),
-                            Grid3x3(), Grid3x3(), Grid3x3() ]
-
-    func allowed( row: Int, col: Int, _ acDigit: Int ) -> Bool
-    {
-        switch acDigit {
-        case 0:
-            return true
-            
-        case 1...9:
-            if !grid[ index( row: row, col: col ) ].allowed( acDigit ) {
-                return false
-            }
-            for x in 0..<9 {
-                //# Test column
-                if acDigit == grid[ index( row: x, col: col ) ][ x % 3, col % 3 ] {
-                    return false
-                }
-                //# Test row
-                if acDigit == grid[ index( row: row, col: x ) ][ row % 3, x % 3 ] {
-                    return false
-                }
-            }
-            return true
-            
-        default:
-            return false
-        }
-    }
-    
-    func isLocked( row: Int, col: Int ) -> Bool
-    {
-        grid[ index( row: row, col: col ) ].isLocked( row: row % 3, col: col % 3 )
-    }
-    
-    mutating func setLocked( row: Int, col: Int, _ abcLocked: Bool )
-    {
-        grid[ index( row: row, col: col ) ].setLocked( row: row % 3, col: col % 3, abcLocked )
-    }
-    
-    func index( row: Int, col: Int ) -> Int
-    {
-        Int( row / 3 ) * 3 + ( col / 3 )
-    }
-    
-    subscript( row: Int, col: Int ) -> Int
-    {
-        get {
-            assert( row >= 0 && row < 9 && col >= 0 && col < 9, "grid out of range" )
-            
-            return grid[ index( row: row, col: col ) ][ row % 3, col % 3 ]
-        }
-        set {
-            assert( row >= 0 && row < 9 && col >= 0 && col < 9, "grid out of range" )
-            
-            if grid[ index( row: row, col: col ) ][ row % 3, col % 3 ] == newValue {
-                grid[ index( row: row, col: col ) ][ row % 3, col % 3 ] = 0
-            } else if allowed( row: row, col: col, newValue ) {
-                grid[ index( row: row, col: col ) ][ row % 3, col % 3 ] = newValue
-            }
-        }
-    }
-}
-
-struct SmallGrid: View {
-    @Binding var enter: Int
-    @Binding var grid3x3: Grid3x3
-    let clicked: ( Int, Int ) -> Void
-    var body: some View {
-        VStack {
-            ForEach( 0..<3 ) { row in
-                HStack {
-                    ForEach( 0..<3 ) { col in
-                        Button( action: {
-                            clicked( row, col )
-                        }) {
-                            let digit = grid3x3[ row, col ]
-                            let locked = grid3x3.isLocked( row: row, col: col )
-                            let color = enter != 0 && enter == digit
-                                ? Color.green : locked ? Color.red : Color.blue
-                            Text( digit == 0 ? "" : String( digit ))
-                                .fontWeight(.bold)
-                                .font(.title)
-                                .frame( width:24, height: 30 )
-                                .foregroundColor( color )
-                                .padding( 5 )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 7)
-                                        .stroke( color, lineWidth: 3)
-                                )
-                        }
-                    }
-                }
-            }
-        }
-        .padding( 6 )
-    }
-}
-
-struct EnterButton: View {
-    @Binding var enter: Int
-    public let digit: Int
-    public let action: () -> Void
     var body: some View {
         Button( action: {
-            action()
+            clicked()
         }) {
-            let color = enter != 0 && enter == digit ? Color.green : Color.blue
-            Text( String( digit ))
-                .fontWeight(.bold)
-                .font(.largeTitle)
-                .frame( width: 40, height: 40 )
+            let cell = game[ row: row, col: col ]
+            let color = enter != 0 && enter == cell.mDigit
+            ? Color.green : cell.mbLocked ? Color.red : Color.gray
+            Text( cell.mDigit == 0 ? "" : String( cell.mDigit ))
+                .fontWeight( cell.mbLocked ? .semibold : .thin )
+                .font(.title2)
+                .frame( width:22, height: 22 )
                 .foregroundColor( color )
-                .padding( 6 )
+                .padding( 5 )
                 .overlay(
-                    RoundedRectangle(cornerRadius: 7)
-                        .stroke( color, lineWidth: 3 )
+                    RoundedRectangle( cornerRadius: 3 )
+                        .stroke( color, lineWidth: 2)
                 )
         }
     }
 }
 
-
-struct ContentView: View {
-    @State private var game = Game()
-    @State private var showAlert = false
-    @State private var enter = 0
-    let sudoku = CSudoku()
+struct RowView: View {
+    @Binding var game: Sudoku
+    public let enter: Int
+    public let row: Int
     
     var body: some View {
-        VStack {
-            Spacer()
-            Spacer()
-            ForEach( 0..<3 ) { row in
-                HStack {
-                    ForEach( 0..<3 ) { col in
-                        SmallGrid( enter: $enter, grid3x3: $game.grid[ row * 3 + col ] ) { r, c in
-                            game[ row * 3 + r, col * 3 + c ] = enter
-                            game.setLocked( row: row * 3 + r, col: col * 3 + c,
-                                            game[ row * 3 + r, col * 3 + c ] == enter )
+        HStack {
+            ForEach( 0..<3 ) { c1 in
+                Group {
+                    Spacer()
+                    ForEach( 0..<3 ) { c2 in
+                        let col = c1 * 3 + c2
+                        CellView( game: $game, enter: enter, row: row, col: col ) {
+                            if enter == game[ row: row, col: col ].mDigit {
+                                game.mSetDigit( row: row, col: col, 0 )
+                            } else if game.mbAllowed( row: row, col: col, enter ) {
+                                game.mLock( row: row, col: col, withDigit: enter )
+                            }
                         }
                     }
-                }
-            }
-            Spacer()
-            HStack {
-                Spacer()
-                Button( action: {
-                    solve()
-                }) {
-                    Text( "SOLVE" )
-                        .padding( 11 )
-                        .padding(.horizontal)
-                        .background( Color.blue )
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                Spacer()
-                Button( action: {
-                    clear()
-                }) {
-                    Text( "CLEAR" )
-                        .padding( 11 )
-                        .padding(.horizontal)
-                        .background( Color.blue )
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                Spacer()
-            }
-            Spacer()
-            VStack {
-                HStack {
-                    ForEach( 0..<5 ) { digit in
-                        EnterButton( enter: $enter, digit: digit ) {
-                            enter = digit
-                        }
-                    }
-                    .padding( 4 )
-                }
-                HStack {
-                    ForEach( 5..<10 ) { digit in
-                        EnterButton( enter: $enter, digit: digit ) {
-                            enter = digit
-                        }
-                    }
-                    .padding( 4 )
                 }
             }
             Spacer()
         }
-        .background(Color.black)
+    }
+}
+
+struct ActionButton: View {
+    public let text: String
+    public let action: () -> Void
+    var body: some View {
+        Button( action: {
+            action()
+        }) {
+            Text( text )
+                .fontWeight(.semibold)
+                .padding( 11 )
+                .padding(.horizontal)
+                .background( Color.blue )
+                .foregroundColor( .white )
+                .cornerRadius( 7 )
+        }
+    }
+}
+
+struct ActionBar: View {
+    @Binding var game: Sudoku
+    @Binding var enter: Int
+    @State private var showAlert = false
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            ActionButton( text: "SOLVE " ) {
+                enter = 0
+                if !game.mbSolve() {
+                    showAlert = true
+                }
+            }
+            .disabled( !game.mbHasDigits(count: 5))
+            Spacer()
+            ActionButton( text: "CLEAR" ) {
+                game.mReset()
+            }
+            Spacer()
+        }
         .alert( isPresented: $showAlert ) {
                  Alert( title: Text( "Sudoku Solver" ),
                         message: Text( "The board could not be solved" ),
                         dismissButton: .default( Text( "OK" )))
              }
     }
+}
+
+struct EnterButton: View {
+    @Binding var enter: Int
+    public let digit: Int
     
-    func clear()
-    {
-        for row in 0..<9 {
-            for col in 0..<9 {
-                game[ row, col ] = 0
-                game.setLocked( row: row, col: col, false )
+    var body: some View {
+        Button( action: {
+            enter = digit
+        }) {
+            let color = enter != 0 && enter == digit ? Color.green : Color.gray
+            Text( String( digit ))
+                .fontWeight(.heavy)
+                .font(.largeTitle)
+                .frame( width: 36, height: 36 )
+                .foregroundColor( color )
+                .padding( 6 )
+                .overlay(
+                    RoundedRectangle( cornerRadius: 5 )
+                        .stroke( color, lineWidth: 3 )
+                )
+        }
+    }
+}
+
+struct EnterBar: View {
+    @Binding var enter: Int
+    
+    var body: some View {
+        VStack {
+            HStack {
+                ForEach( 0..<5 ) { digit in
+                    EnterButton( enter: $enter, digit: digit )
+                }
+                .padding( 5 )
+            }
+            HStack {
+                ForEach( 5..<10 ) { digit in
+                    EnterButton( enter: $enter, digit: digit )
+                }
+                .padding( 5 )
             }
         }
     }
+}
+
+struct ContentView: View {
+    @State private var game = Sudoku()
+    @State private var enter = 0
     
-    func solve()
-    {
-        enter = 0
-        sudoku.mReset()
-        for row in 0..<9 {
-            for col in 0..<9 {
-                sudoku.mSetCell( row: row + 1, col: col + 1, digit: game[ row, col ] )
-                if game[ row, col ] > 0 {
-                    game.setLocked( row: row, col: col, true )
+    var body: some View {
+        VStack {
+            Text( "Sudoku Solver" )
+                .font(.largeTitle)
+                .foregroundColor(.gray)
+            Text( "Enter digits and solve the puzzle" )
+                .font(.caption)
+                .foregroundColor(.gray)
+            ForEach( 0..<9 ) { row in
+                if row % 3 == 0 {
+                    Spacer()
                 }
+                RowView( game: $game, enter: enter, row: row )
             }
+            Spacer()
+            ActionBar( game: $game, enter: $enter )
+            Spacer()
+            EnterBar( enter: $enter )
+            Spacer()
+            Text( "(c) 2023 W.J. de Ruiter" )
+                .font(.body)
+                .foregroundColor(.gray)
         }
-        if sudoku.mbSolve() {
-            for row in 0..<9 {
-                for col in 0..<9 {
-                    if game[ row, col ] == 0 {
-                        game[ row, col ] = sudoku.mGetCell( row: row + 1, col: col + 1 )
-                    }
-                }
-            }
-        }
-        else
-        {
-            showAlert = true
+        .background(Color.black)
+        .onAppear {
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation") // Forcing the rotation to portrait
+            AppDelegate.orientationLock = .portrait // And making sure it stays that way
+        }.onDisappear {
+            AppDelegate.orientationLock = .all // Unlocking the rotation when leaving the view
         }
     }
 }
