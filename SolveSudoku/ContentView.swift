@@ -50,8 +50,8 @@ struct RowView: View {
                         CellView( game: $game, enter: enter, row: row, col: col ) {
                             if enter == game[ row: row, col: col ].mDigit {
                                 game.mSetDigit( row: row, col: col, 0 )
-                            } else if game.mbAllowed( row: row, col: col, enter ) {
-                                game.mLock( row: row, col: col, withDigit: enter )
+                            } else if game.mbAllowed( row: row, col: col, UInt8( enter )) {
+                                game.mLock( row: row, col: col, withDigit: UInt8( enter ))
                             }
                         }
                     }
@@ -65,6 +65,7 @@ struct RowView: View {
 struct ActionButton: View {
     public let text: String
     public let action: () -> Void
+    
     var body: some View {
         Button( action: {
             action()
@@ -90,14 +91,17 @@ struct ActionBar: View {
             Spacer()
             ActionButton( text: "SOLVE " ) {
                 enter = 0
-                if !game.mbSolve() {
+                var helper = game
+                if helper.mbSolve() {
+                    game = helper
+                } else {
                     showAlert = true
                 }
             }
             .disabled( !game.mbHasDigits(count: 5))
             Spacer()
             ActionButton( text: "CLEAR" ) {
-                game.mReset()
+                game.mClear()
             }
             Spacer()
         }
