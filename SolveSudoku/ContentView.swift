@@ -152,10 +152,8 @@ struct SmallGrid: View {
                         }) {
                             let digit = grid3x3[ row, col ]
                             let locked = grid3x3.isLocked( row: row, col: col )
-                            let color = locked ? Color.red
-                                               : enter != 0 && enter == digit
-                            ? Color.green
-                            : Color.blue
+                            let color = enter != 0 && enter == digit
+                                ? Color.green : locked ? Color.red : Color.blue
                             Text( digit == 0 ? "" : String( digit ))
                                 .fontWeight(.bold)
                                 .font(.title)
@@ -265,7 +263,9 @@ struct ContentView: View {
                     .padding( 4 )
                 }
             }
+            Spacer()
         }
+        .background(Color.black)
         .alert( isPresented: $showAlert ) {
                  Alert( title: Text( "Sudoku Solver" ),
                         message: Text( "The board could not be solved" ),
