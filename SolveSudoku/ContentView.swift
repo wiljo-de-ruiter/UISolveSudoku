@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+private let selectedBackColor = Color.init( red: 0.75, green: 0.95, blue: 0.75 )
+private let lockedBackColor   = Color.init( red: 0.90, green: 0.90, blue: 0.90 )
+private let normalBackColor   = Color.white
+private let selectedFrontColor = Color.black
+private let normalFrontColor   = Color.black
+
 struct CellView: View {
     @Binding var game: Sudoku
     public let enter: Int
@@ -20,14 +26,14 @@ struct CellView: View {
         }) {
             let cell = game[ row: row, col: col ]
             let selected = enter != 0 && enter == cell.mDigit
-            let color = selected ? Color.black : Color.black
+            let color = selected ? selectedFrontColor : normalFrontColor
             Text( cell.mDigit == 0 ? "" : String( cell.mDigit ))
                 .fontWeight( cell.mbLocked ? .bold : .regular )
                 .font(.title2)
                 .frame( width:24, height: 24 )
                 .foregroundColor( color )
                 .padding( 5 )
-                .background( selected ? Color.init(red: 0.7, green: 0.9, blue: 0.7) : cell.mbLocked ? Color.init(red: 0.9, green: 0.9, blue: 0.9) : Color.white )
+                .background( selected ? selectedBackColor : cell.mbLocked ? lockedBackColor : normalBackColor )
                 .overlay(
                     RoundedRectangle( cornerRadius: 3 )
                         .stroke( color, lineWidth: cell.mbLocked ? 3 : 1 )
@@ -122,14 +128,14 @@ struct EnterButton: View {
         Button( action: {
             enter = digit
         }) {
-            let color = enter != 0 && enter == digit ? Color.black : Color.black
+            let color = enter != 0 && enter == digit ? selectedFrontColor : normalFrontColor
             Text( String( digit ))
                 .fontWeight(.heavy)
                 .font(.largeTitle)
                 .frame( width: 36, height: 36 )
                 .foregroundColor( color )
                 .padding( 6 )
-                .background( enter != 0 && enter == digit ? Color.init(red: 0.7, green: 0.9, blue: 0.7) : Color.white )
+                .background( enter != 0 && enter == digit ? selectedBackColor : normalBackColor )
                 .overlay(
                     RoundedRectangle( cornerRadius: 5 )
                         .stroke( color, lineWidth: enter != 0 && enter == digit ? 5 : 3 )
@@ -161,7 +167,7 @@ struct EnterBar: View {
 
 struct ContentView: View {
     @State private var game = Sudoku()
-    @State private var enter = 2
+    @State private var enter = 0
     
     var body: some View {
         VStack {
