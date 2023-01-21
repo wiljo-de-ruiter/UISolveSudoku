@@ -14,7 +14,8 @@
 		9A16519B29748CD3005BD342 /* SolveSudokuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16519A29748CD3005BD342 /* SolveSudokuTests.swift */; };
 		9A1651A529748CD3005BD342 /* SolveSudokuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651A429748CD3005BD342 /* SolveSudokuUITests.swift */; };
 		9A1651A729748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651A629748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift */; };
-		9A1651B62975EECC005BD342 /* SolveSudoku.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B52975EECC005BD342 /* SolveSudoku.swift */; };
+		9A1651B62975EECC005BD342 /* SudokuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B52975EECC005BD342 /* SudokuExtension.swift */; };
+		9A1651B8297BFA1E005BD342 /* Sudoku.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B7297BFA1E005BD342 /* Sudoku.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +46,8 @@
 		9A1651A029748CD3005BD342 /* SolveSudokuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SolveSudokuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A1651A429748CD3005BD342 /* SolveSudokuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolveSudokuUITests.swift; sourceTree = "<group>"; };
 		9A1651A629748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolveSudokuUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		9A1651B52975EECC005BD342 /* SolveSudoku.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SolveSudoku.swift; sourceTree = "<group>"; };
+		9A1651B52975EECC005BD342 /* SudokuExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SudokuExtension.swift; sourceTree = "<group>"; };
+		9A1651B7297BFA1E005BD342 /* Sudoku.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sudoku.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,11 +98,12 @@
 		9A16518829748CD0005BD342 /* SolveSudoku */ = {
 			isa = PBXGroup;
 			children = (
-				9A1651B52975EECC005BD342 /* SolveSudoku.swift */,
+				9A1651B52975EECC005BD342 /* SudokuExtension.swift */,
 				9A16518929748CD0005BD342 /* SolveSudokuApp.swift */,
 				9A16518B29748CD0005BD342 /* ContentView.swift */,
 				9A16518D29748CD2005BD342 /* Assets.xcassets */,
 				9A16518F29748CD2005BD342 /* Preview Content */,
+				9A1651B7297BFA1E005BD342 /* Sudoku.swift */,
 			);
 			path = SolveSudoku;
 			sourceTree = "<group>";
@@ -261,7 +264,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9A16518C29748CD0005BD342 /* ContentView.swift in Sources */,
-				9A1651B62975EECC005BD342 /* SolveSudoku.swift in Sources */,
+				9A1651B62975EECC005BD342 /* SudokuExtension.swift in Sources */,
+				9A1651B8297BFA1E005BD342 /* Sudoku.swift in Sources */,
 				9A16518A29748CD0005BD342 /* SolveSudokuApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -349,7 +353,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -403,7 +407,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -424,11 +428,12 @@
 				DEVELOPMENT_TEAM = STFSXZZN89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = SolveSudoku;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -454,11 +459,12 @@
 				DEVELOPMENT_TEAM = STFSXZZN89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = SolveSudoku;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
