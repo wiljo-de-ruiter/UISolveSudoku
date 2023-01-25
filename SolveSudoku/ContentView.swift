@@ -11,8 +11,9 @@ extension Color {
     static var normalTextColor = Color( "NormalTextColor" )
     static var lockedBackColor = Color( "LockedBackColor" )
     static var normalBackColor = Color( "NormalBackColor" )
-    static var selectedTextColor = Color( "SelectedTextColor" )
     static var selectedBackColor = Color( "SelectedBackColor" )
+    static var heavyLineColor = Color( "HeavyLineColor" )
+    static var lightLineColor = Color( "LightLineColor" )
 }
 
 struct CellView: View {
