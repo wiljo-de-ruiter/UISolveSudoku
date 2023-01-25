@@ -7,11 +7,13 @@
 
 import SwiftUI
 
-private let selectedBackColor = Color.init( red: 0.75, green: 0.95, blue: 0.75 )
-private let lockedBackColor   = Color.init( red: 0.90, green: 0.90, blue: 0.90 )
-private let normalBackColor   = Color.white
-private let selectedFrontColor = Color.black
-private let normalFrontColor   = Color.black
+extension Color {
+    static var normalTextColor = Color( "NormalTextColor" )
+    static var lockedBackColor = Color( "LockedBackColor" )
+    static var normalBackColor = Color( "NormalBackColor" )
+    static var selectedTextColor = Color( "SelectedTextColor" )
+    static var selectedBackColor = Color( "SelectedBackColor" )
+}
 
 struct CellView: View {
     @Binding var game: Sudoku
@@ -26,14 +28,14 @@ struct CellView: View {
         }) {
             let cell = game[ row: row, col: col ]
             let selected = enter != 0 && enter == cell.mDigit
-            let color = selected ? selectedFrontColor : normalFrontColor
+            let color = selected ? Color.selectedTextColor : Color.normalTextColor
             Text( cell.mDigit == 0 ? "" : String( cell.mDigit ))
                 .fontWeight( cell.mbLocked ? .bold : .regular )
                 .font(.title2)
                 .frame( width:24, height: 24 )
                 .foregroundColor( color )
                 .padding( 5 )
-                .background( selected ? selectedBackColor : cell.mbLocked ? lockedBackColor : normalBackColor )
+                .background( selected ? Color.selectedBackColor : cell.mbLocked ? Color.lockedBackColor : Color.normalBackColor )
                 .overlay(
                     RoundedRectangle( cornerRadius: 3 )
                         .stroke( color, lineWidth: cell.mbLocked ? 3 : 1 )
@@ -128,17 +130,17 @@ struct EnterButton: View {
         Button( action: {
             enter = digit
         }) {
-            let color = enter != 0 && enter == digit ? selectedFrontColor : normalFrontColor
+            let textColor = enter != 0 && enter == digit ? Color.selectedTextColor : Color.normalTextColor
             Text( String( digit ))
                 .fontWeight(.heavy)
                 .font(.largeTitle)
                 .frame( width: 36, height: 36 )
-                .foregroundColor( color )
+                .foregroundColor( textColor )
                 .padding( 6 )
-                .background( enter != 0 && enter == digit ? selectedBackColor : normalBackColor )
+                .background( enter != 0 && enter == digit ? Color.selectedBackColor : Color.normalBackColor )
                 .overlay(
                     RoundedRectangle( cornerRadius: 5 )
-                        .stroke( color, lineWidth: enter != 0 && enter == digit ? 5 : 3 )
+                        .stroke( textColor, lineWidth: enter != 0 && enter == digit ? 5 : 3 )
                 )
         }
     }
@@ -173,10 +175,10 @@ struct ContentView: View {
         VStack {
             Text( "Sudoku Solver" )
                 .font(.largeTitle)
-                .foregroundColor(.black)
+                .foregroundColor(Color.normalTextColor)
             Text( "Enter digits and solve the puzzle" )
                 .font(.caption)
-                .foregroundColor(.black)
+                .foregroundColor(Color.normalTextColor)
             ForEach( 0..<9 ) { row in
                 if row % 3 == 0 {
                     Spacer()
@@ -192,7 +194,7 @@ struct ContentView: View {
                 .font(.body)
                 .foregroundColor(.gray)
         }
-        .background(Color.white)
+        .background(Color.normalBackColor)
         .onAppear {
             UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation") // Forcing the rotation to portrait
             AppDelegate.orientationLock = .portrait // And making sure it stays that way
