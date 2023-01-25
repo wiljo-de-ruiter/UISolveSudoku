@@ -16,6 +16,8 @@
 		9A1651A729748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651A629748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift */; };
 		9A1651B62975EECC005BD342 /* SudokuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B52975EECC005BD342 /* SudokuExtension.swift */; };
 		9A1651B8297BFA1E005BD342 /* Sudoku.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B7297BFA1E005BD342 /* Sudoku.swift */; };
+		9A1651BA297C4EE5005BD342 /* EmailHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B9297C4EE5005BD342 /* EmailHelper.swift */; };
+		9A1651BC297C50D0005BD342 /* ApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651BB297C50D0005BD342 /* ApplicationExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,8 @@
 		9A1651A629748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolveSudokuUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		9A1651B52975EECC005BD342 /* SudokuExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SudokuExtension.swift; sourceTree = "<group>"; };
 		9A1651B7297BFA1E005BD342 /* Sudoku.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sudoku.swift; sourceTree = "<group>"; };
+		9A1651B9297C4EE5005BD342 /* EmailHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailHelper.swift; sourceTree = "<group>"; };
+		9A1651BB297C50D0005BD342 /* ApplicationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +108,8 @@
 				9A16518D29748CD2005BD342 /* Assets.xcassets */,
 				9A16518F29748CD2005BD342 /* Preview Content */,
 				9A1651B7297BFA1E005BD342 /* Sudoku.swift */,
+				9A1651B9297C4EE5005BD342 /* EmailHelper.swift */,
+				9A1651BB297C50D0005BD342 /* ApplicationExtension.swift */,
 			);
 			path = SolveSudoku;
 			sourceTree = "<group>";
@@ -263,10 +269,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A1651BC297C50D0005BD342 /* ApplicationExtension.swift in Sources */,
 				9A16518C29748CD0005BD342 /* ContentView.swift in Sources */,
 				9A1651B62975EECC005BD342 /* SudokuExtension.swift in Sources */,
 				9A1651B8297BFA1E005BD342 /* Sudoku.swift in Sources */,
 				9A16518A29748CD0005BD342 /* SolveSudokuApp.swift in Sources */,
+				9A1651BA297C4EE5005BD342 /* EmailHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

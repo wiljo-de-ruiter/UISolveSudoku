@@ -113,6 +113,9 @@ struct ActionBar: View {
                 game.mClear()
             }
             Spacer()
+//            ActionButton( text: "Send Email" ) {
+//                EmailHelper.shared.sendEmail( subject: "Anything...", body: "Whatever", to: "wiljo.de.ruiter@gmail.com")
+//            }
         }
         .alert( isPresented: $showAlert ) {
                  Alert( title: Text( "Sudoku Solver" ),
