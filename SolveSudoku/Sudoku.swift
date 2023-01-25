@@ -95,7 +95,23 @@ struct Sudoku
         return count >= acCount
     }
     //------------------------------------------------------------------------
-    public mutating func mClear()
+    public mutating func mbClearNotLocked() -> Bool
+    {
+        var bCleared = false
+        for row in 0..<9 {
+            for col in 0..<9 {
+                if !self[ row: row, col: col ].mbLocked {
+                    if !self[ row: row, col: col ].mbIsEmpty() {
+                        self[ row: row, col: col ].mClear()
+                        bCleared = true
+                    }
+                }
+            }
+        }
+        return bCleared
+    }
+    //------------------------------------------------------------------------
+    public mutating func mClearAll()
     {
         for row in 0..<9 {
             for col in 0..<9 {

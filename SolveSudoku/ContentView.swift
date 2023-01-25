@@ -110,7 +110,9 @@ struct ActionBar: View {
             .disabled( !game.mbHasDigits(count: 5))
             Spacer()
             ActionButton( text: "CLEAR" ) {
-                game.mClear()
+                if !game.mbClearNotLocked() {
+                    game.mClearAll()
+                }
             }
             Spacer()
 //            ActionButton( text: "Send Email" ) {
