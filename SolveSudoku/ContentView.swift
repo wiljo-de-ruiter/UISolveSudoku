@@ -195,9 +195,12 @@ struct ContentView: View {
             Spacer()
             EnterBar( enter: $enter )
             Spacer()
-            Text( "(c) 2023 W.J. de Ruiter" )
-                .font(.body)
-                .foregroundColor(.gray)
+            HStack {
+                Image( systemName: "c.circle" )
+                Text( "2023 W.J. de Ruiter" )
+            }
+            .font(.body)
+            .foregroundColor(.gray)
         }
         .background(Color.normalBackColor)
         .onAppear {
