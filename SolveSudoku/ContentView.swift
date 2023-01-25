@@ -29,41 +29,66 @@ struct CellView: View {
         }) {
             let cell = game[ row: row, col: col ]
             let selected = enter != 0 && enter == cell.mDigit
-            let color = selected ? Color.selectedTextColor : Color.normalTextColor
-            Text( cell.mDigit == 0 ? "" : String( cell.mDigit ))
-                .fontWeight( cell.mbLocked ? .bold : .regular )
-                .font(.title2)
-                .frame( width:24, height: 24 )
-                .foregroundColor( color )
-                .padding( 5 )
-                .background( selected ? Color.selectedBackColor : cell.mbLocked ? Color.lockedBackColor : Color.normalBackColor )
-                .overlay(
-                    RoundedRectangle( cornerRadius: 3 )
-                        .stroke( color, lineWidth: cell.mbLocked ? 3 : 1 )
-                )
+            let backColor = selected ? Color.selectedBackColor :
+                cell.mbLocked ? Color.lockedBackColor: Color.normalBackColor
+            Rectangle()
+                .stroke( Color.lightLineColor, lineWidth: 1 )
+                .background( backColor )
+                .aspectRatio(contentMode: .fit)
+                .overlay() {
+                    Text( cell.mDigit == 0 ? "" : String( cell.mDigit ))
+                        .fontWeight( cell.mbLocked ? .heavy : .light )
+                        .font( .title )
+                        .foregroundColor( Color.normalTextColor )
+                }
         }
     }
 }
 
-struct RowView: View {
+struct SquareView: View {
     @Binding var game: Sudoku
     public let enter: Int
     public let row: Int
-    
+    public let col: Int
+
     var body: some View {
-        HStack {
-            ForEach( 0..<3 ) { c1 in
-                Group {
-                    Spacer()
-                    ForEach( 0..<3 ) { c2 in
-                        let col = c1 * 3 + c2
-                        CellView( game: $game, enter: enter, row: row, col: col ) {
-                            if enter == game[ row: row, col: col ].mDigit {
-                                game.mSetDigit( row: row, col: col, 0 )
-                            } else if game.mbAllowed( row: row, col: col, UInt8( enter )) {
-                                game.mLock( row: row, col: col, withDigit: UInt8( enter ))
+        Rectangle()
+            .stroke( Color.heavyLineColor, lineWidth: 3 )
+            .background( Color.normalBackColor )
+            .aspectRatio( contentMode: .fit )
+            .overlay() {
+                VStack( spacing: 0 ) {
+                    ForEach( 0..<3 ) { r in
+                        let rr = row + r
+                        HStack( spacing: 0 ) {
+                            ForEach( 0..<3 ) { c in
+                                let cc = col + c
+                                CellView( game: $game, enter: enter, row: rr, col: cc ) {
+                                    if enter == game[ row: rr, col: cc ].mDigit {
+                                        game.mSetDigit( row: rr, col: cc, 0 )
+                                    } else if game.mbAllowed( row: rr, col: cc, UInt8( enter )) {
+                                        game.mLock( row: rr, col: cc, withDigit: UInt8( enter ))
+                                    }
+                                }
                             }
                         }
+                    }
+                }
+            }
+    }
+}
+
+struct SudokuView: View {
+    @Binding var game: Sudoku
+    public let enter: Int
+
+    var body: some View {
+        VStack( spacing: 2 ) {
+            ForEach( 0..<3 ) { rr in
+                HStack( spacing: 2 ) {
+                    Spacer()
+                    ForEach( 0..<3 ) { cc in
+                        SquareView(game: $game, enter: enter, row: rr * 3, col: cc * 3 )
                     }
                     Spacer()
                 }
@@ -136,18 +161,17 @@ struct EnterButton: View {
         Button( action: {
             enter = digit
         }) {
-            let textColor = enter != 0 && enter == digit ? Color.selectedTextColor : Color.normalTextColor
-            Text( String( digit ))
-                .fontWeight(.heavy)
-                .font(.largeTitle)
-                .frame( width: 36, height: 36 )
-                .foregroundColor( textColor )
-                .padding( 6 )
-                .background( enter != 0 && enter == digit ? Color.selectedBackColor : Color.normalBackColor )
-                .overlay(
-                    RoundedRectangle( cornerRadius: 5 )
-                        .stroke( textColor, lineWidth: enter != 0 && enter == digit ? 5 : 3 )
-                )
+            let selected = enter != 0 && digit == enter
+            let backColor = selected ? Color.selectedBackColor : Color.lightLineColor
+            RoundedRectangle( cornerRadius: 7 )
+                .fill( backColor )
+                .aspectRatio(CGFloat(0.7), contentMode: .fit)// contentMode: .fill )
+                .overlay() {
+                    Text( "\(digit)" )
+                        .fontWeight( selected ? .heavy : .light )
+                        .font( .title )
+                        .foregroundColor( Color.normalTextColor )
+                }
         }
     }
 }
@@ -156,19 +180,12 @@ struct EnterBar: View {
     @Binding var enter: Int
     
     var body: some View {
-        VStack {
-            HStack {
-                ForEach( 0..<5 ) { digit in
-                    EnterButton( enter: $enter, digit: digit )
-                }
-                .padding( 5 )
+        HStack( spacing: 2 ) {
+            Spacer()
+            ForEach( 1..<10 ) { digit in
+                EnterButton( enter: $enter, digit: digit )
             }
-            HStack {
-                ForEach( 5..<10 ) { digit in
-                    EnterButton( enter: $enter, digit: digit )
-                }
-                .padding( 5 )
-            }
+            Spacer()
         }
     }
 }
@@ -179,29 +196,32 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Text( "Sudoku Solver" )
-                .font(.largeTitle)
-                .foregroundColor(Color.normalTextColor)
-            Text( "Enter digits and solve the puzzle" )
-                .font(.caption)
-                .foregroundColor(Color.normalTextColor)
-            ForEach( 0..<9 ) { row in
-                if row % 3 == 0 {
-                    Spacer()
+            Group {
+                Text( "Sudoku Solver" )
+                    .font(.largeTitle)
+                    .foregroundColor(Color.normalTextColor)
+                Text( "Enter digits and solve the puzzle" )
+                    .font(.caption)
+                    .foregroundColor(Color.normalTextColor)
+                Spacer()
+            }
+            SudokuView( game: $game, enter: enter )
+            Spacer()
+            Group {
+                Spacer()
+                ActionBar( game: $game, enter: $enter )
+                Spacer()
+                EnterBar( enter: $enter )
+            }
+            Group {
+                Spacer()
+                HStack {
+                    Image( systemName: "c.circle" )
+                    Text( "2023 W.J. de Ruiter" )
                 }
-                RowView( game: $game, enter: enter, row: row )
+                .font(.body)
+                .foregroundColor(.gray)
             }
-            Spacer()
-            ActionBar( game: $game, enter: $enter )
-            Spacer()
-            EnterBar( enter: $enter )
-            Spacer()
-            HStack {
-                Image( systemName: "c.circle" )
-                Text( "2023 W.J. de Ruiter" )
-            }
-            .font(.body)
-            .foregroundColor(.gray)
         }
         .background(Color.normalBackColor)
         .onAppear {
