@@ -38,7 +38,7 @@ struct ActionBar: View {
                 enter = 0
                 var helper = game
                 print("Initial sudoku puzzle:")
-                if helper.mbSolve2() {
+                if helper.mbSolve() {
                     game = helper
                 } else {
                     showAlert = true

@@ -18,7 +18,7 @@ public func SquareRange( index aIndex: Int ) -> Range<Int>
 //#
 extension Sudoku
 {
-    public mutating func mbSolve2( depth acDepth: Int = 1 ) -> Bool
+    public mutating func mbSolve( depth acDepth: Int = 1 ) -> Bool
     {
         if mb_Solved() {
             print("Solution:")
@@ -28,9 +28,7 @@ extension Sudoku
         mShowBoard()
         
         if mb_StillPossible() {
-            var bestPossibilities = 10
-            var bestRow = -1
-            var bestCol = -1
+            var best = ( row: -1, col: -1, digits: [UInt8]() )
             
             m_FillSingles()
 
@@ -42,37 +40,41 @@ extension Sudoku
             for row in 0..<9 {
                 for col in 0..<9 {
                     guard self[ row: row, col: col ].mbIsEmpty() else { continue }
-                    var possibilities = 0
+                    var digits = [UInt8]()
 
                     for digit: UInt8 in 1...9 {
                         if mbIsAllowed( row: row, col: col, digit ) {
-                            possibilities += 1
+                            digits.append( digit )
                         }
                     }
-                    if possibilities < bestPossibilities {
-                        bestPossibilities = possibilities
-                        bestRow = row
-                        bestCol = col
+                    if digits.count < best.digits.count || best.digits.count == 0 {
+                        best.digits = digits
+                        best.row = row
+                        best.col = col
+                    }
+                    if best.digits.count == 1 {
+                        break
                     }
                 }
+                if best.digits.count == 1 {
+                    break
+                }
             }
-            if bestRow < 0 {
+            if best.digits.count == 0 {
                 //* No possibilities found
                 return false
             }
             var index = 0
-            for digit: UInt8 in 1...9 {
-                if mbIsAllowed( row: bestRow, col: bestCol, digit ) {
-                    var helper: Sudoku = self
-                    index += 1
-                    print( "Try recursive[\(acDepth)] digit \(digit) [\(index) of \(bestPossibilities)] at \(bestRow) x \(bestCol)" )
-                    helper.mSetDigit( row: bestRow, col: bestCol, digit )
-                    if helper.mbSolve2( depth: acDepth + 1 ) {
-                        self = helper
-                        return true
-                    }
-                    print( "Rejected \(digit) at \(bestRow) x \(bestCol)" )
+            for digit: UInt8 in best.digits {
+                var helper: Sudoku = self
+                index += 1
+                print( "Try recursive[\(acDepth)] digit \(digit) [\(index) of \(best.digits.count)] at \(best.row) x \(best.col)" )
+                helper.mSetDigit( row: best.row, col: best.col, digit )
+                if helper.mbSolve( depth: acDepth + 1 ) {
+                    self = helper
+                    return true
                 }
+                print( "Rejected \(digit) at \(best.row) x \(best.col)" )
             }
         } else {
             print("NOT POSSIBLE!")
@@ -88,8 +90,8 @@ extension Sudoku
             for row in 0..<9 {
                 for col in 0..<9 {
                     guard self[ row: row, col: col ].mbIsEmpty() else { continue }
-                    var bestPossibilities = ( digit: UInt8( 0 ), count: 10 )
-                    var bestCount = ( digit: UInt8( 0 ), count: 0)
+                    var bestPossibilities = ( count: 10, digit: UInt8( 0 ))
+                    var bestCount = ( count: 0, digit: UInt8( 0 ))
                     for digit: UInt8 in 1...9 {
                         if mbIsAllowed( row: row, col: col, digit ) {
                             bestCount.count += 1
