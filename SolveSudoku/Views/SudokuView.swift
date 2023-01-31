@@ -28,7 +28,7 @@ struct CellView: View {
                 .aspectRatio(contentMode: .fit)
                 .overlay() {
                     Text( cell.mDigit == 0 ? "" : String( cell.mDigit ))
-                        .fontWeight( cell.mbLocked ? .heavy : .light )
+                        .fontWeight( cell.mbLocked ? .bold : .thin )
                         .font( .title )
                         .foregroundColor( Color.normalTextColor )
                 }
