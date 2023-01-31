@@ -27,11 +27,6 @@ extension Sudoku
         } else if acDepth > Sudoku.gDepth {
             Sudoku.gDepth = acDepth
         }
-        if mb_Solved() {
-            print("Solution: depth = \(Sudoku.gDepth)")
-            mShowBoard()
-            return true
-        }
         mShowBoard()
         
         if mb_FillSingles() {
@@ -121,12 +116,10 @@ extension Sudoku
                         mSetDigit( row: row, col: col, bestCount.digit )
                         print("Found single digit \(bestCount.digit) at \(row) x \(col)")
                         bSingles = true
-                        mShowBoard()
                     } else if bestPossibilities.count == 1 {
                         mSetDigit( row: row, col: col, bestPossibilities.digit )
                         print("Found single digit \(bestPossibilities.digit) at \(row) x \(col)")
                         bSingles = true
-                        mShowBoard()
                     }
                 }
             }
