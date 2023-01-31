@@ -55,10 +55,9 @@ struct SquareView: View {
                             ForEach( 0..<3 ) { c in
                                 let cc = col + c
                                 CellView( game: $game, enter: enter, row: rr, col: cc ) {
-//                                    if enter == game[ row: rr, col: cc ].mDigit {
-//                                        game.mSetDigit( row: rr, col: cc, 0 )
-//                                    } else
-                                    if game.mbIsAllowed( row: rr, col: cc, UInt8( enter )) {
+                                    if enter == game[ row: rr, col: cc ].mDigit {
+                                        game.mSetDigit( row: rr, col: cc, 0 )
+                                    } else if game.mbIsAllowed( row: rr, col: cc, UInt8( enter )) {
                                         game.mLockDigit( row: rr, col: cc, UInt8( enter ))
                                     }
                                 }
