@@ -168,19 +168,27 @@ struct Sudoku
         }
     }
     //------------------------------------------------------------------------
-    public func mShowBoard()
+    public func mShowBoard( solution acSolution: Bool = false )
     {
+        if acSolution {
+            print("+------ Solution -------+")
+        } else {
+            print("+-------+-------+-------+")
+        }
         for row in 0..<9 {
-            var line = ""
-            if row == 3 || row == 6 { print("") }
+            var line = "| "
+            if row == 3 || row == 6 {
+                print("+-------+-------+-------+")
+            }
             for col in 0..<9 {
-                if col == 3 || col == 6 { line += "  " }
+                if col == 3 || col == 6 { line += "| " }
                 line.append( self[ row: row, col: col ].mCharDigit )
                 line.append( " " )
             }
+            line.append("|")
             print( line )
         }
-        print( "" )
+        print("+-------+-------+-------+")
     }
     //------------------------------------------------------------------------
     public func mbIsAllowed( row acRow: Int, col acCol: Int, _ acDigit: UInt8 ) -> Bool
