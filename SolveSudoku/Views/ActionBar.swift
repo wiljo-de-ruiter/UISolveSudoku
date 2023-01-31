@@ -37,7 +37,6 @@ struct ActionBar: View {
             ActionButton( text: "SOLVE " ) {
                 enter = 0
                 var helper = game
-                print("Initial sudoku puzzle:")
                 if helper.mbSolve() {
                     game = helper
                 } else {

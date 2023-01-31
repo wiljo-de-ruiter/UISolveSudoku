@@ -24,15 +24,16 @@ extension Sudoku
     {
         if acDepth == 1 {
             Sudoku.gDepth = 1
+            print("Initial sudoku puzzle:")
         } else if acDepth > Sudoku.gDepth {
             Sudoku.gDepth = acDepth
+            print("Recursive depth: \(Sudoku.gDepth)")
         }
         mShowBoard()
         
         if mb_FillSingles() {
             if mb_Solved() {
-                print("Solution: depth = \(Sudoku.gDepth)")
-                mShowBoard()
+                mShowBoard( solution: true )
                 return true
             }
             let best = m_FindBestPos()
