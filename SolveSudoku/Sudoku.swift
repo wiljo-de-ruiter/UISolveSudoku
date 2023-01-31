@@ -71,15 +71,26 @@ struct Sudoku
 //        mLockRow( row: 6, with: "...6..758" )
 //        mLockRow( row: 7, with: ".8..276" )
 //        mLockRow( row: 8, with: "...83" )
-        mLockRow( row: 0, with: "9.372...6" )
-        mLockRow( row: 1, with: "7..6148" )
-        mLockRow( row: 2, with: "" )
-        mLockRow( row: 3, with: ".5..9.17" )
-        mLockRow( row: 4, with: "2468" )
-        mLockRow( row: 5, with: "197253..8" )
-        mLockRow( row: 6, with: "67...528" )
-        mLockRow( row: 7, with: "489" )
-        mLockRow( row: 8, with: ".32.8.6" )
+//
+//        mLockRow( row: 0, with: "9.372...6" )
+//        mLockRow( row: 1, with: "7..6148" )
+//        mLockRow( row: 2, with: "" )
+//        mLockRow( row: 3, with: ".5..9.17" )
+//        mLockRow( row: 4, with: "2468" )
+//        mLockRow( row: 5, with: "197253..8" )
+//        mLockRow( row: 6, with: "67...528" )
+//        mLockRow( row: 7, with: "489" )
+//        mLockRow( row: 8, with: ".32.8.6" )
+        
+        mLockRow( row: 0, with: "" )
+        mLockRow( row: 1, with: "9.2...5.7" )
+        mLockRow( row: 2, with: "4...7..86" )
+        mLockRow( row: 3, with: "2961" )
+        mLockRow( row: 4, with: "18" )
+        mLockRow( row: 5, with: "7....51" )
+        mLockRow( row: 6, with: "..9..4.5" )
+        mLockRow( row: 7, with: "......82" )
+        mLockRow( row: 8, with: "86..3" )
     }
     //------------------------------------------------------------------------
     subscript( row acRow: Int, col acCol: Int ) -> Cell
@@ -174,7 +185,7 @@ struct Sudoku
     //------------------------------------------------------------------------
     public func mbIsAllowed( row acRow: Int, col acCol: Int, _ acDigit: UInt8 ) -> Bool
     {
-        if acDigit > 9 {
+        if acDigit > 9 || self[ row: acRow, col: acCol ].mDigit > 0 {
             return false
         }
         if acDigit > 0 {
