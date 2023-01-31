@@ -18,48 +18,30 @@ public func SquareRange( index aIndex: Int ) -> Range<Int>
 //#
 extension Sudoku
 {
+    static public var gDepth = 0
+    //------------------------------------------------------------------------
     public mutating func mbSolve( depth acDepth: Int = 1 ) -> Bool
     {
+        if acDepth == 1 {
+            Sudoku.gDepth = 1
+        } else if acDepth > Sudoku.gDepth {
+            Sudoku.gDepth = acDepth
+        }
         if mb_Solved() {
-            print("Solution:")
+            print("Solution: depth = \(Sudoku.gDepth)")
             mShowBoard()
             return true
         }
         mShowBoard()
         
-        if mb_StillPossible() {
-            var best = ( row: -1, col: -1, digits: [UInt8]() )
-            
-            m_FillSingles()
-
+        if mb_FillSingles() {
             if mb_Solved() {
-                print("Solution:")
+                print("Solution: depth = \(Sudoku.gDepth)")
                 mShowBoard()
                 return true
             }
-            for row in 0..<9 {
-                for col in 0..<9 {
-                    guard self[ row: row, col: col ].mbIsEmpty() else { continue }
-                    var digits = [UInt8]()
-
-                    for digit: UInt8 in 1...9 {
-                        if mbIsAllowed( row: row, col: col, digit ) {
-                            digits.append( digit )
-                        }
-                    }
-                    if digits.count < best.digits.count || best.digits.count == 0 {
-                        best.digits = digits
-                        best.row = row
-                        best.col = col
-                    }
-                    if best.digits.count == 1 {
-                        break
-                    }
-                }
-                if best.digits.count == 1 {
-                    break
-                }
-            }
+            let best = m_FindBestPos()
+            
             if best.digits.count == 0 {
                 //* No possibilities found
                 return false
@@ -82,10 +64,41 @@ extension Sudoku
         return false
     }
     //------------------------------------------------------------------------
-    private mutating func m_FillSingles()
+    private func m_FindBestPos() -> ( row: Int, col: Int, digits: [UInt8] )
+    {
+        var best = ( row: 0, col: 0, digits: [UInt8]())
+
+        for row in 0..<9 {
+            for col in 0..<9 {
+                guard self[ row: row, col: col ].mbIsEmpty() else { continue }
+                var digits = [UInt8]()
+
+                for digit: UInt8 in 1...9 {
+                    if mbIsAllowed( row: row, col: col, digit ) {
+                        digits.append( digit )
+                    }
+                }
+                if digits.count < best.digits.count || best.digits.count == 0 {
+                    best.digits = digits
+                    best.row = row
+                    best.col = col
+                    
+                    if best.digits.count == 1 {
+                        return best
+                    }
+                }
+            }
+        }
+        return best
+    }
+    //------------------------------------------------------------------------
+    private mutating func mb_FillSingles() -> Bool
     {
         var bSingles: Bool
         repeat {
+            if !mb_StillPossible() {
+                return false
+            }
             bSingles = false
             for row in 0..<9 {
                 for col in 0..<9 {
@@ -118,6 +131,7 @@ extension Sudoku
                 }
             }
         } while( bSingles )
+        return true
     }
     //------------------------------------------------------------------------
     private func m_ComputePossibilities( row acRow: Int, col acCol: Int, digit acDigit: UInt8 ) -> Int
