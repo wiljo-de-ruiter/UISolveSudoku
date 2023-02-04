@@ -20,16 +20,11 @@ struct EnterButton: View {
             ZStack {
                 RoundedRectangle( cornerRadius: 7 )
                     .fill( backColor )
-                    .aspectRatio(CGFloat(0.6), contentMode: .fit)// contentMode: .fill )
-//                    .overlay() {
-//                        Text( "\(digit)" )
-//                            .fontWeight( selected ? .heavy : .light )
-//                            .font( .title )
-//                            .foregroundColor( Color.normalTextColor )
-//                    }
+                    .aspectRatio(CGFloat(0.6), contentMode: .fit)
+                
                 RoundedRectangle( cornerRadius: 7 )
-                    .stroke(Color.normalTextColor, lineWidth: 3 )
-                    .aspectRatio(CGFloat(0.6), contentMode: .fit)// contentMode: .fill )
+                    .stroke( Color.normalTextColor, lineWidth: 2 )
+                    .aspectRatio( CGFloat(0.6), contentMode: .fit )
                     .overlay() {
                         Text( "\(digit)" )
                             .fontWeight( selected ? .heavy : .light )
