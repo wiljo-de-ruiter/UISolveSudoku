@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var game = Sudoku()
+    @State private var isWorking = false
     @State private var enter = 0
     
     var body: some View {
@@ -23,14 +24,16 @@ struct ContentView: View {
                 Spacer()
             }
             SudokuView( game: $game, enter: enter )
+                .disabled( isWorking )
             Spacer()
             Group {
                 Spacer()
-                ActionBar( game: $game, enter: $enter )
+                ActionBar( game: $game, working: $isWorking, enter: $enter )
                 Spacer()
                 EnterBar( enter: $enter )
                 Spacer()
             }
+            .disabled( isWorking )
 //            Group {
 //                HStack {
 //                    Image( systemName: "c.circle" )

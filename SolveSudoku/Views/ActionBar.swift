@@ -28,58 +28,45 @@ struct ActionButton: View {
 
 struct WorkButton: View {
     public let text: String
+    @Binding var working: Bool
     public let action: () -> Void
-    @State private var isWorking = false
     
     var body: some View {
         Button {
-            Task {
-                await execAction()
-            }
+            action()
         } label: {
             Text( text )
                 .fontWeight(.semibold)
                 .padding( 11 )
                 .padding(.horizontal)
-                .background( isWorking ? Color.lightLineColor : Color.blue )
-                .foregroundColor( .white )
+                .background( working ? Color.lightLineColor : Color.blue )
+                .foregroundColor( working ? Color.lightLineColor : Color.white )
                 .cornerRadius( 7 )
-                .opacity( isWorking ? 0 : 1 )
                 .overlay {
-                    if isWorking {
+                    if working {
                         ProgressView()
                     }
                 }
         }
-        .disabled(isWorking)
-    }
-    
-    public func execAction() async
-    {
-        isWorking = true
-        action()
-        isWorking = false
     }
 }
 
 struct ActionBar: View {
     @Binding var game: Sudoku
+    @Binding var working: Bool
     @Binding var enter: Int
     @State private var showAlert = false
-    
+
     var body: some View {
         HStack {
             Spacer()
-            WorkButton( text: "SOLVE" ) {
-                enter = 0
-                var helper = game
-                if helper.mbSolve() {
-                    game = helper
-                } else {
-                    showAlert = true
+            WorkButton( text: "SOLVE", working: $working ) {
+                Task {
+                    await solvePuzzle()
                 }
             }
             .disabled( !game.mbHasDigits(count: 5))
+
             Spacer()
             ActionButton( text: "CLEAR" ) {
                 if !game.mbClearNotLocked() {
@@ -96,6 +83,20 @@ struct ActionBar: View {
                         message: Text( "The board could not be solved" ),
                         dismissButton: .default( Text( "OK" )))
              }
+    }
+
+    public func solvePuzzle() async
+    {
+        enter = 0
+        working = true
+        sleep(1)
+        var helper = game
+        if helper.mbSolve() {
+            game = helper
+        } else {
+            showAlert = true
+        }
+        working = false
     }
 }
 
