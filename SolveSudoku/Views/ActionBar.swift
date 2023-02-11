@@ -26,6 +26,42 @@ struct ActionButton: View {
     }
 }
 
+struct WorkButton: View {
+    public let text: String
+    public let action: () -> Void
+    @State private var isWorking = false
+    
+    var body: some View {
+        Button {
+            Task {
+                await execAction()
+            }
+        } label: {
+            Text( text )
+                .fontWeight(.semibold)
+                .padding( 11 )
+                .padding(.horizontal)
+                .background( isWorking ? Color.lightLineColor : Color.blue )
+                .foregroundColor( .white )
+                .cornerRadius( 7 )
+                .opacity( isWorking ? 0 : 1 )
+                .overlay {
+                    if isWorking {
+                        ProgressView()
+                    }
+                }
+        }
+        .disabled(isWorking)
+    }
+    
+    public func execAction() async
+    {
+        isWorking = true
+        action()
+        isWorking = false
+    }
+}
+
 struct ActionBar: View {
     @Binding var game: Sudoku
     @Binding var enter: Int
@@ -34,7 +70,7 @@ struct ActionBar: View {
     var body: some View {
         HStack {
             Spacer()
-            ActionButton( text: "SOLVE " ) {
+            WorkButton( text: "SOLVE" ) {
                 enter = 0
                 var helper = game
                 if helper.mbSolve() {
