@@ -11,9 +11,6 @@
 		9A16518C29748CD0005BD342 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16518B29748CD0005BD342 /* ContentView.swift */; };
 		9A16518E29748CD2005BD342 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A16518D29748CD2005BD342 /* Assets.xcassets */; };
 		9A16519129748CD2005BD342 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A16519029748CD2005BD342 /* Preview Assets.xcassets */; };
-		9A16519B29748CD3005BD342 /* SolveSudokuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16519A29748CD3005BD342 /* SolveSudokuTests.swift */; };
-		9A1651A529748CD3005BD342 /* SolveSudokuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651A429748CD3005BD342 /* SolveSudokuUITests.swift */; };
-		9A1651A729748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651A629748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift */; };
 		9A1651B62975EECC005BD342 /* SudokuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B52975EECC005BD342 /* SudokuExtension.swift */; };
 		9A1651B8297BFA1E005BD342 /* Sudoku.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B7297BFA1E005BD342 /* Sudoku.swift */; };
 		9A1651BA297C4EE5005BD342 /* EmailHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651B9297C4EE5005BD342 /* EmailHelper.swift */; };
@@ -48,10 +45,7 @@
 		9A16518D29748CD2005BD342 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A16519029748CD2005BD342 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9A16519629748CD3005BD342 /* SolveSudokuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SolveSudokuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A16519A29748CD3005BD342 /* SolveSudokuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolveSudokuTests.swift; sourceTree = "<group>"; };
 		9A1651A029748CD3005BD342 /* SolveSudokuUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SolveSudokuUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A1651A429748CD3005BD342 /* SolveSudokuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolveSudokuUITests.swift; sourceTree = "<group>"; };
-		9A1651A629748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolveSudokuUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		9A1651B52975EECC005BD342 /* SudokuExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SudokuExtension.swift; sourceTree = "<group>"; };
 		9A1651B7297BFA1E005BD342 /* Sudoku.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sudoku.swift; sourceTree = "<group>"; };
 		9A1651B9297C4EE5005BD342 /* EmailHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailHelper.swift; sourceTree = "<group>"; };
@@ -91,8 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				9A16518829748CD0005BD342 /* SolveSudoku */,
-				9A16519929748CD3005BD342 /* SolveSudokuTests */,
-				9A1651A329748CD3005BD342 /* SolveSudokuUITests */,
 				9A16518729748CD0005BD342 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -127,23 +119,6 @@
 				9A16519029748CD2005BD342 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		9A16519929748CD3005BD342 /* SolveSudokuTests */ = {
-			isa = PBXGroup;
-			children = (
-				9A16519A29748CD3005BD342 /* SolveSudokuTests.swift */,
-			);
-			path = SolveSudokuTests;
-			sourceTree = "<group>";
-		};
-		9A1651A329748CD3005BD342 /* SolveSudokuUITests */ = {
-			isa = PBXGroup;
-			children = (
-				9A1651A429748CD3005BD342 /* SolveSudokuUITests.swift */,
-				9A1651A629748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift */,
-			);
-			path = SolveSudokuUITests;
 			sourceTree = "<group>";
 		};
 		9A1651C529844FE9005BD342 /* Views */ = {
@@ -314,7 +289,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A16519B29748CD3005BD342 /* SolveSudokuTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,8 +296,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A1651A529748CD3005BD342 /* SolveSudokuUITests.swift in Sources */,
-				9A1651A729748CD3005BD342 /* SolveSudokuUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
