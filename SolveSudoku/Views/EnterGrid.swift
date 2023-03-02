@@ -20,11 +20,11 @@ struct EnterButton: View {
             ZStack {
                 RoundedRectangle( cornerRadius: 7 )
                     .fill( backColor )
-                    .aspectRatio(CGFloat(0.6), contentMode: .fit)
+                    .aspectRatio(CGFloat(1), contentMode: .fit)
                 
                 RoundedRectangle( cornerRadius: 7 )
                     .stroke( Color.normalTextColor, lineWidth: 2 )
-                    .aspectRatio( CGFloat(0.6), contentMode: .fit )
+                    .aspectRatio( CGFloat(1), contentMode: .fit )
                     .overlay() {
                         Text( "\(digit)" )
                             .fontWeight( selected ? .heavy : .light )
@@ -32,23 +32,30 @@ struct EnterButton: View {
                             .foregroundColor( Color.normalTextColor )
                     }
             }
+            .padding(2)
         }
     }
 }
 
-struct EnterBar: View {
+struct EnterGrid: View {
     @Binding var enter: Int
-    
+    let columns = [
+        GridItem(.flexible(minimum: 64, maximum: 100)),
+        GridItem(.flexible(minimum: 64, maximum: 100)),
+        GridItem(.flexible(minimum: 64, maximum: 100)),
+        ]
     var body: some View {
-        HStack {
-            Spacer()
+        LazyVGrid( columns: columns, spacing: 4 ) {
             ForEach( 1..<10 ) { digit in
                 EnterButton( enter: $enter, digit: digit )
+                    .frame( width: 60, height: 60 )
+                    .fixedSize()
+                    .padding(5)
             }
-            Spacer()
         }
 
-/*        VStack( spacing: 2 ) {
+/*
+        VStack( spacing: 2 ) {
             HStack {
                 VStack {
                     HStack( spacing: 0 ) {
@@ -161,12 +168,12 @@ struct EnterBar: View {
                     }
                 }
             }
-        }*/
+        } */
     }
 }
 
 struct EnterBar_Previews: PreviewProvider {
     static var previews: some View {
-        EnterBar( enter: .constant( 3 ))
+        EnterGrid( enter: .constant( 3 ))
     }
 }

@@ -18,7 +18,7 @@
 		9A1651BE29844F05005BD342 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651BD29844F05005BD342 /* ColorExtension.swift */; };
 		9A1651C029844F46005BD342 /* SudokuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651BF29844F46005BD342 /* SudokuView.swift */; };
 		9A1651C229844F90005BD342 /* ActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651C129844F90005BD342 /* ActionBar.swift */; };
-		9A1651C429844FBC005BD342 /* EnterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651C329844FBC005BD342 /* EnterBar.swift */; };
+		9A1651C429844FBC005BD342 /* EnterGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1651C329844FBC005BD342 /* EnterGrid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +53,7 @@
 		9A1651BD29844F05005BD342 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		9A1651BF29844F46005BD342 /* SudokuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SudokuView.swift; sourceTree = "<group>"; };
 		9A1651C129844F90005BD342 /* ActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBar.swift; sourceTree = "<group>"; };
-		9A1651C329844FBC005BD342 /* EnterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterBar.swift; sourceTree = "<group>"; };
+		9A1651C329844FBC005BD342 /* EnterGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterGrid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,7 +126,7 @@
 			children = (
 				9A1651C129844F90005BD342 /* ActionBar.swift */,
 				9A16518B29748CD0005BD342 /* ContentView.swift */,
-				9A1651C329844FBC005BD342 /* EnterBar.swift */,
+				9A1651C329844FBC005BD342 /* EnterGrid.swift */,
 				9A1651BF29844F46005BD342 /* SudokuView.swift */,
 			);
 			path = Views;
@@ -280,7 +280,7 @@
 				9A1651B8297BFA1E005BD342 /* Sudoku.swift in Sources */,
 				9A16518A29748CD0005BD342 /* SolveSudokuApp.swift in Sources */,
 				9A1651BE29844F05005BD342 /* ColorExtension.swift in Sources */,
-				9A1651C429844FBC005BD342 /* EnterBar.swift in Sources */,
+				9A1651C429844FBC005BD342 /* EnterGrid.swift in Sources */,
 				9A1651BA297C4EE5005BD342 /* EmailHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
