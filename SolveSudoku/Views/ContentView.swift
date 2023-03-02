@@ -21,27 +21,25 @@ struct ContentView: View {
                 Text( "Enter digits and solve the puzzle" )
                     .font(.caption)
                     .foregroundColor(Color.normalTextColor)
-                Spacer()
             }
-            SudokuView( game: $game, enter: enter )
-                .disabled( isWorking )
-            Spacer()
             Group {
                 Spacer()
-                ActionBar( game: $game, working: $isWorking, enter: $enter )
-                Spacer()
-                EnterBar( enter: $enter )
+                SudokuView( game: $game, enter: enter )
+                    .disabled( isWorking )
                 Spacer()
             }
-            .disabled( isWorking )
-//            Group {
-//                HStack {
-//                    Image( systemName: "c.circle" )
-//                    Text( "2023 W.J. de Ruiter" )
-//                }
-//                .font(.body)
-//                .foregroundColor(.gray)
-//            }
+            Group {
+                HStack {
+                    Spacer()
+                    ActionBar( game: $game, working: $isWorking, enter: $enter )
+                    Spacer()
+                    EnterGrid( enter: $enter )
+                    Spacer()
+                }
+                .disabled( isWorking )
+                .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer()
         }
         .background(Color.normalBackColor)
         .onAppear {
