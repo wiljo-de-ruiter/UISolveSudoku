@@ -56,27 +56,39 @@ struct ActionBar: View {
     @Binding var working: Bool
     @Binding var enter: Int
     @State private var showAlert = false
-
+    
     var body: some View {
-        HStack {
+        VStack {
             Spacer()
+  
             WorkButton( text: "SOLVE", working: $working ) {
                 Task {
                     await solvePuzzle()
                 }
             }
             .disabled( !game.mbHasDigits(count: 5))
-
+            
             Spacer()
+
             ActionButton( text: "CLEAR" ) {
                 if !game.mbClearNotLocked() {
                     game.mClearAll()
                 }
             }
-            Spacer()
+//            Spacer()
 //            ActionButton( text: "Send Email" ) {
 //                EmailHelper.shared.sendEmail( subject: "Anything...", body: "Whatever", to: "wiljo.de.ruiter@gmail.com")
 //            }
+            Spacer()
+            Group {
+                HStack {
+                    Image( systemName: "c.circle" )
+                    Text( "2023" )
+                }
+                Text( "W.J. de Ruiter" )
+            }
+            .font(.caption)
+            .foregroundColor(Color.lightLineColor)
         }
         .alert( isPresented: $showAlert ) {
                  Alert( title: Text( "Sudoku Solver" ),
@@ -92,16 +104,16 @@ struct ActionBar: View {
         sleep(1)
         var helper = game
         if helper.mbSolve() {
-            game = helper
+            for row in 0..<9 {
+                for col in 0..<9 {
+                    guard game[ row: row, col: col ].mbIsEmpty() else { continue }
+                    try? await Task.sleep( nanoseconds: 40_000_000 )
+                    game[ row: row, col: col ].mSetDigit( helper[ row: row, col: col ].mDigit )
+                }
+            }
         } else {
             showAlert = true
         }
         working = false
     }
 }
-
-//struct ActionBar_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ActionBar()
-//    }
-//}
