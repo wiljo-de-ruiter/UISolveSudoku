@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct EnterButton: View {
-    @Binding var enter: Int
-    public let digit: Int
+    @EnvironmentObject var global: CGlobalData
+    @EnvironmentObject var game: CSudoku
+    public let digit: UInt8
     
     var body: some View {
         Button( action: {
-            enter = digit
+            global.mEnter = digit
         }) {
-            let selected = enter != 0 && digit == enter
+            let selected = global.mEnter != 0 && digit == global.mEnter
             let backColor = selected ? Color.selectedBackColor : Color.lightLineColor
             ZStack {
                 RoundedRectangle( cornerRadius: 7 )
@@ -38,7 +39,6 @@ struct EnterButton: View {
 }
 
 struct EnterGrid: View {
-    @Binding var enter: Int
     let columns = [
         GridItem(.flexible(minimum: 64, maximum: 100)),
         GridItem(.flexible(minimum: 64, maximum: 100)),
@@ -47,7 +47,7 @@ struct EnterGrid: View {
     var body: some View {
         LazyVGrid( columns: columns, spacing: 4 ) {
             ForEach( 1..<10 ) { digit in
-                EnterButton( enter: $enter, digit: digit )
+                EnterButton( digit: UInt8( digit ))
                     .frame( width: 60, height: 60 )
                     .fixedSize()
                     .padding(5)
@@ -174,6 +174,6 @@ struct EnterGrid: View {
 
 struct EnterBar_Previews: PreviewProvider {
     static var previews: some View {
-        EnterGrid( enter: .constant( 3 ))
+        EnterGrid().environmentObject(CSudoku())
     }
 }

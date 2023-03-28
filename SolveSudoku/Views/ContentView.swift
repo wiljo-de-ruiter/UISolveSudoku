@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var game = Sudoku()
-    @State private var isWorking = false
-    @State private var enter = 0
+    @StateObject private var global = CGlobalData()
+    @StateObject private var game = CSudoku()
     
     var body: some View {
         VStack {
@@ -24,23 +23,25 @@ struct ContentView: View {
             }
             Group {
                 Spacer()
-                SudokuView( game: $game, enter: enter )
-                    .disabled( isWorking )
+                SudokuView()
+                    .disabled( global.mbWorking )
                 Spacer()
             }
             Group {
                 HStack {
                     Spacer()
-                    ActionBar( game: $game, working: $isWorking, enter: $enter )
+                    ActionBar()
                     Spacer()
-                    EnterGrid( enter: $enter )
+                    EnterGrid()
                     Spacer()
                 }
-                .disabled( isWorking )
+                .disabled( global.mbWorking )
                 .fixedSize(horizontal: false, vertical: true)
             }
             Spacer()
         }
+        .environmentObject( game )
+        .environmentObject( global )
         .background(Color.normalBackColor)
         .onAppear {
             UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation") // Forcing the rotation to portrait

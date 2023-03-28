@@ -16,18 +16,18 @@ public func SquareRange( index aIndex: Int ) -> Range<Int>
 //############################################################################
 //# Sudoku extension
 //#
-extension Sudoku
+extension CSudoku
 {
-    static public var gDepth = 0
+    static private var gDepth = 0
     //------------------------------------------------------------------------
-    public mutating func mbSolve( depth acDepth: Int = 1 ) -> Bool
+    public func mbSolve( depth acDepth: Int = 1 ) -> Bool
     {
         if acDepth == 1 {
-            Sudoku.gDepth = 1
+            CSudoku.gDepth = 1
             print("Initial sudoku puzzle:")
-        } else if acDepth > Sudoku.gDepth {
-            Sudoku.gDepth = acDepth
-            print("Recursive depth: \(Sudoku.gDepth)")
+        } else if acDepth > CSudoku.gDepth {
+            CSudoku.gDepth = acDepth
+            print("Recursive depth: \(CSudoku.gDepth)")
         }
         mShowBoard()
         
@@ -44,12 +44,14 @@ extension Sudoku
             }
             var index = 0
             for digit: UInt8 in best.digits {
-                var helper: Sudoku = self
+                let helper = CSudoku()
+                
+                helper.mAssign( game: self )
                 index += 1
                 print( "Try recursive[\(acDepth)] digit \(digit) [\(index) of \(best.digits.count)] at \(best.row) x \(best.col)" )
                 helper.mSetDigit( row: best.row, col: best.col, digit )
                 if helper.mbSolve( depth: acDepth + 1 ) {
-                    self = helper
+                    self.mAssign( game: helper )
                     return true
                 }
                 print( "Rejected \(digit) at \(best.row) x \(best.col)" )
@@ -88,7 +90,7 @@ extension Sudoku
         return best
     }
     //------------------------------------------------------------------------
-    private mutating func mb_FillSingles() -> Bool
+    private func mb_FillSingles() -> Bool
     {
         var bSingles: Bool
         repeat {

@@ -8,9 +8,19 @@
 import Foundation
 //#
 //###########################################################################
-//# Sudoku # Sudoku # Sudoku # Sudoku  #  Sudoku # Sudoku # Sudoku # Sudoku #
+//# CGlobalData # CGlobalData  #  CGlobalData  #  CGlobalData # CGlobalData #
 //#
-struct Sudoku
+class CGlobalData: ObservableObject
+{
+    @Published public var mEnter: UInt8 = 0
+    @Published public var mbWorking: Bool = false
+}
+//#
+//# CGlobalData # CGlobalData  #  CGlobalData  #  CGlobalData # CGlobalData #
+//###########################################################################
+//# CSudoku # CSudoku # CSudoku  #  CSudoku  #  CSudoku # CSudoku # CSudoku #
+//#
+class CSudoku: ObservableObject
 {
     //#
     //########################################################################
@@ -48,7 +58,7 @@ struct Sudoku
         }
     }
     //------------------------------------------------------------------------
-    public var mBoard = [Cell].init( repeating: Cell(), count: 100 )
+    @Published public var mBoard = [Cell].init( repeating: Cell(), count: 100 )
     //------------------------------------------------------------------------
     init()
     {
@@ -118,7 +128,7 @@ struct Sudoku
         return count >= acCount
     }
     //------------------------------------------------------------------------
-    public mutating func mbClearNotLocked() -> Bool
+    public func mbClearNotLocked() -> Bool
     {
         var bCleared = false
         for row in 0..<9 {
@@ -134,7 +144,16 @@ struct Sudoku
         return bCleared
     }
     //------------------------------------------------------------------------
-    public mutating func mClearAll()
+    public func mAssign( game aGame: CSudoku )
+    {
+        for row in 0..<9 {
+            for col in 0..<9 {
+                self[ row: row, col: col ] = aGame[ row: row, col: col ]
+            }
+        }
+    }
+    //------------------------------------------------------------------------
+    public func mClearAll()
     {
         for row in 0..<9 {
             for col in 0..<9 {
@@ -143,17 +162,17 @@ struct Sudoku
         }
     }
     //------------------------------------------------------------------------
-    public mutating func mSetDigit( row acRow: Int, col acCol: Int, _ acNewDigit: UInt8 )
+    public func mSetDigit( row acRow: Int, col acCol: Int, _ acNewDigit: UInt8 )
     {
         self[ row: acRow, col: acCol ].mSetDigit( acNewDigit )
     }
     //-----------------------------------------------------------------------
-    public mutating func mLockDigit( row acRow: Int, col acCol: Int, _ acNewDigit: UInt8 )
+    public func mLockDigit( row acRow: Int, col acCol: Int, _ acNewDigit: UInt8 )
     {
         self[ row: acRow, col: acCol ].mLockDigit( acNewDigit )
     }
     //------------------------------------------------------------------------
-    public mutating func mLockRow( row acRow: Int, with acDigits: String )
+    public func mLockRow( row acRow: Int, with acDigits: String )
     {
         var col = 0
         for char in acDigits {
@@ -191,6 +210,32 @@ struct Sudoku
         print("+-------+-------+-------+")
     }
     //------------------------------------------------------------------------
+    public func mBoard( solution abcSolution: Bool = false ) -> String
+    {
+        var board = "<pre role=\"img\">"
+        if abcSolution {
+            board += "Solution:<br>"
+        }
+        board += "+-------+-------+-------+<br>"
+        
+        for row in 0..<9 {
+            var line = "| "
+            if row == 3 || row == 6 {
+                board += "+-------+-------+-------+<br>"
+            }
+            for col in 0..<9 {
+                if col == 3 || col == 6 { line += "| " }
+                line.append( self[ row: row, col: col ].mCharDigit )
+                line.append( " " )
+            }
+            line.append("|<br>")
+            board += line
+        }
+        board += "+-------+-------+-------+<br>"
+        board += "</pre>"
+        return board
+    }
+    //------------------------------------------------------------------------
     public func mbIsAllowed( row acRow: Int, col acCol: Int, _ acDigit: UInt8 ) -> Bool
     {
         if acDigit > 9 || self[ row: acRow, col: acCol ].mDigit > 0 {
@@ -219,6 +264,6 @@ struct Sudoku
     }
 }
 //#
-//# Sudoku # Sudoku # Sudoku # Sudoku  #  Sudoku # Sudoku # Sudoku # Sudoku #
+//# CSudoku # CSudoku # CSudoku  #  CSudoku  #  CSudoku # CSudoku # CSudoku #
 //###########################################################################
 //#

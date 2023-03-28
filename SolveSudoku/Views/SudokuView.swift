@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CellView: View {
-    @Binding var game: Sudoku
-    public let enter: Int
+    @EnvironmentObject var global: CGlobalData
+    @EnvironmentObject var game: CSudoku
     let row: Int
     let col: Int
     let clicked: () -> Void
@@ -19,7 +19,7 @@ struct CellView: View {
             clicked()
         }) {
             let cell = game[ row: row, col: col ]
-            let selected = enter != 0 && enter == cell.mDigit
+            let selected = global.mEnter != 0 && global.mEnter == cell.mDigit
             let backColor = selected ? Color.selectedBackColor :
                 cell.mbLocked ? Color.lockedBackColor: Color.normalBackColor
             Rectangle()
@@ -37,8 +37,8 @@ struct CellView: View {
 }
 
 struct SquareView: View {
-    @Binding var game: Sudoku
-    public let enter: Int
+    @EnvironmentObject var global: CGlobalData
+    @EnvironmentObject var game: CSudoku
     public let row: Int
     public let col: Int
 
@@ -54,11 +54,11 @@ struct SquareView: View {
                         HStack( spacing: 0 ) {
                             ForEach( 0..<3 ) { c in
                                 let cc = col + c
-                                CellView( game: $game, enter: enter, row: rr, col: cc ) {
-                                    if enter == game[ row: rr, col: cc ].mDigit {
+                                CellView( row: rr, col: cc ) {
+                                    if global.mEnter == game[ row: rr, col: cc ].mDigit {
                                         game.mSetDigit( row: rr, col: cc, 0 )
-                                    } else if game.mbIsAllowed( row: rr, col: cc, UInt8( enter )) {
-                                        game.mLockDigit( row: rr, col: cc, UInt8( enter ))
+                                    } else if game.mbIsAllowed( row: rr, col: cc, global.mEnter ) {
+                                        game.mLockDigit( row: rr, col: cc, global.mEnter )
                                     }
                                 }
                             }
@@ -70,16 +70,13 @@ struct SquareView: View {
 }
 
 struct SudokuView: View {
-    @Binding var game: Sudoku
-    public let enter: Int
-
     var body: some View {
         VStack( spacing: 2 ) {
             ForEach( 0..<3 ) { rr in
                 HStack( spacing: 2 ) {
                     Spacer()
                     ForEach( 0..<3 ) { cc in
-                        SquareView(game: $game, enter: enter, row: rr * 3, col: cc * 3 )
+                        SquareView( row: rr * 3, col: cc * 3 )
                     }
                     Spacer()
                 }
