@@ -103,7 +103,7 @@ struct ActionBar: View {
     {
         global.mEnter = 0
         global.mbWorking = true
-        sleep(1)
+        try? await Task.sleep( nanoseconds: 1_000_000_000 )
         let helper = CSudoku()
         helper.mAssign( game: game )
         
@@ -114,12 +114,10 @@ struct ActionBar: View {
                 for col in 0..<9 {
                     guard game[ row: row, col: col ].mbIsEmpty() else { continue }
                     try? await Task.sleep( nanoseconds: 40_000_000 )
-                    print("Show digit \(helper[ row: row, col: col ].mDigit) at \(row)x\(col)")
                     game[ row: row, col: col ].mSetDigit( helper[ row: row, col: col ].mDigit )
                 }
             }
             bodyMail += game.mBoard( solution: true )
-            print("EMail:\n\(bodyMail)")
         } else {
             showAlert = true
         }

@@ -18,7 +18,7 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .foregroundColor(Color.normalTextColor)
                 Text( "Enter digits and solve the puzzle" )
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundColor(Color.normalTextColor)
             }
             Group {
