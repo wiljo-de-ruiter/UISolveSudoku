@@ -85,7 +85,7 @@ struct ActionBar: View {
             Group {
                 HStack {
                     Image( systemName: "c.circle" )
-                    Text( "2023" )
+                    Text( "2024" )
                 }
                 Text( "W.J. de Ruiter" )
             }
